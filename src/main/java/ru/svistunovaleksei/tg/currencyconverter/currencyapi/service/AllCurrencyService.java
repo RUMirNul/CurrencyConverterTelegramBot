@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.APIMessageEnum;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.AllCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrency;
 
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class AllCurrencyService {
     public void update() {
         RestTemplate restTemplate = new RestTemplate();
         AllCurrency allCurrency = restTemplate.getForEntity(url, AllCurrency.class).getBody();
-        if (allCurrency.getStatus().equalsIgnoreCase(APIMessageEnum.SUCCESS.getMessage())) {
+        if (allCurrency.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
             this.allCurrenciesNames = allCurrency.getCurrencies();
             this.allCurrenciesNames.put("RUB", "Российский рубль");
         }

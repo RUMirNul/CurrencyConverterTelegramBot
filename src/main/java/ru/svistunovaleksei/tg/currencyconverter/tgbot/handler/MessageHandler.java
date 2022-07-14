@@ -5,9 +5,9 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.CurrencyController;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.ToCurrencyConvert;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessageEnum;
+import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessage;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.TextConstants;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.keyboard.ReplyKeyboardMaker;
 
@@ -36,7 +36,7 @@ public class MessageHandler {
                 return getStartMessage(chatId);
 
             case TextConstants.help:
-                return getMessage(chatId, BotMessageEnum.HELP_MESSAGE);
+                return getMessage(chatId, BotMessage.HELP_MESSAGE);
 
             case TextConstants.allCurrency:
                 return getAllCurrencyMessage(chatId);
@@ -51,19 +51,19 @@ public class MessageHandler {
                 }
         }
 
-        return getMessage(chatId, BotMessageEnum.UNKNOWN_COMMAND_MESSAGE);
+        return getMessage(chatId, BotMessage.UNKNOWN_COMMAND_MESSAGE);
     }
 
     private SendMessage getStartMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, BotMessageEnum.START_MESSAGE.getMessage());
+        SendMessage sendMessage = new SendMessage(chatId, BotMessage.START_MESSAGE.getMessage());
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(replyKeyboardMaker.getMainMenuKeyboard());
 
         return sendMessage;
     }
 
-    private SendMessage getMessage(String chatId, BotMessageEnum botMessageEnum) {
-        SendMessage sendMessage = new SendMessage(chatId, botMessageEnum.getMessage());
+    private SendMessage getMessage(String chatId, BotMessage botMessage) {
+        SendMessage sendMessage = new SendMessage(chatId, botMessage.getMessage());
         sendMessage.enableMarkdown(true);
 
         return sendMessage;
@@ -75,11 +75,11 @@ public class MessageHandler {
         sendMessage.enableMarkdown(true);
 
         if (from.split(",").length > 1) {
-            sendMessage.setText(BotMessageEnum.EXCEPTION_CONVERT_FROM_ARGS_LENGTH_MESSAGE.getMessage());
+            sendMessage.setText(BotMessage.EXCEPTION_CONVERT_FROM_ARGS_LENGTH_MESSAGE.getMessage());
             return sendMessage;
         }
         if (to.split(",").length > 10) {
-            sendMessage.setText(BotMessageEnum.EXCEPTION_CONVERT_TO_ARGS_LENGTH_MESSAGE.getMessage());
+            sendMessage.setText(BotMessage.EXCEPTION_CONVERT_TO_ARGS_LENGTH_MESSAGE.getMessage());
             return sendMessage;
         }
 
@@ -88,12 +88,12 @@ public class MessageHandler {
             rates = currencyController.getCalcRateAmount(amount, from, to);
 
         } catch (InputAmountException e) {
-            sendMessage.setText(BotMessageEnum.EXCEPTION_CURRENCY_INPUT_AMOUNT_MESSAGE.getMessage());
+            sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_INPUT_AMOUNT_MESSAGE.getMessage());
 
             return sendMessage;
 
         } catch (IllegalArgumentException e) {
-            sendMessage.setText(BotMessageEnum.EXCEPTION_NO_VALID_CURRENCY_CODE_MESSAGE.getMessage());
+            sendMessage.setText(BotMessage.EXCEPTION_NO_VALID_CURRENCY_CODE_MESSAGE.getMessage());
 
             return sendMessage;
         }
@@ -118,7 +118,7 @@ public class MessageHandler {
             sendMessage.setText(sb.toString());
 
         } else {
-            sendMessage.setText(BotMessageEnum.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage());
+            sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage());
         }
 
         return sendMessage;
@@ -141,7 +141,7 @@ public class MessageHandler {
             }
             sendMessage.setText(sb.toString());
         } else {
-            sendMessage.setText(BotMessageEnum.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage());
+            sendMessage.setText(BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage());
         }
 
         return sendMessage;

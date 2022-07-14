@@ -1,11 +1,11 @@
 package ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant;
 
-public enum APIMessageEnum {
+public enum ApiMessage {
     SUCCESS("success");
 
     private String message;
 
-    APIMessageEnum(String message) {
+    ApiMessage(String message) {
         this.message = message;
     }
 

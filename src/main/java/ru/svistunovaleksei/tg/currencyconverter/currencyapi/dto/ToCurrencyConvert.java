@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity;
+package ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto;
 
 public class ToCurrencyConvert {
     private String currency_name;

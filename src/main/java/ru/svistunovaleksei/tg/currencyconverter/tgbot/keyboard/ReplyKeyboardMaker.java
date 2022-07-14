@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.ButtonNameEnum;
+import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.ButtonName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import java.util.List;
 public class ReplyKeyboardMaker {
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
         KeyboardRow rowFirst = new KeyboardRow();
-        rowFirst.add(new KeyboardButton((ButtonNameEnum.ALL_CURRENCY_BUTTON.getButtonName())));
-        rowFirst.add(new KeyboardButton(ButtonNameEnum.HELP_BUTTON.getButtonName()));
+        rowFirst.add(new KeyboardButton((ButtonName.ALL_CURRENCY_BUTTON.getButtonName())));
+        rowFirst.add(new KeyboardButton(ButtonName.HELP_BUTTON.getButtonName()));
 
 
         List<KeyboardRow> keyboard = new ArrayList<>();

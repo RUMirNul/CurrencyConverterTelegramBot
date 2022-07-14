@@ -3,8 +3,8 @@ package ru.svistunovaleksei.tg.currencyconverter.currencyapi.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.ToCurrencyConvert;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 
 import java.util.Map;
 

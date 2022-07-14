@@ -1,9 +1,9 @@
 package ru.svistunovaleksei.tg.currencyconverter.currencyapi;
 
 import org.springframework.stereotype.Controller;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.APIMessageEnum;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.ToCurrencyConvert;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.service.AllCurrencyService;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.service.FromToCurrencyService;
@@ -24,7 +24,7 @@ public class CurrencyController {
     }
 
     public Map<String, String> getAllCurrenciesNames() {
-        if (!allCurrencyService.getStatus().equalsIgnoreCase(APIMessageEnum.SUCCESS.getMessage())) {
+        if (!allCurrencyService.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
             allCurrencyService.update();
         }
         return allCurrencyService.getAllCurrenciesNames();
@@ -36,7 +36,7 @@ public class CurrencyController {
         }
         if (validateCurrencyCode(from) && validateCurrencyCode(to)) {
             FromToCurrency fromToCurrency = fromToCurrencyService.getCalcRateAmount(amount, from, to);
-            if (fromToCurrency.getStatus().equalsIgnoreCase(APIMessageEnum.SUCCESS.getMessage())) {
+            if (fromToCurrency.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
                 return fromToCurrency.getRates();
             }
         } else {

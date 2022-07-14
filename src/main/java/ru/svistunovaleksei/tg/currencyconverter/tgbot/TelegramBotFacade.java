@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessageEnum;
+import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessage;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.handler.MessageHandler;
 
 @Component
@@ -24,6 +24,6 @@ public class TelegramBotFacade {
         if (message != null && message.hasText()) {
             return messageHandler.handler(message);
         }
-        return new SendMessage(message.getChatId().toString(), BotMessageEnum.UNKNOWN_COMMAND_MESSAGE.getMessage());
+        return new SendMessage(message.getChatId().toString(), BotMessage.UNKNOWN_COMMAND_MESSAGE.getMessage());
     }
 }

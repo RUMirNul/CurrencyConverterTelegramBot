@@ -6,12 +6,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.CurrencyController;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessage;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.TextConstants;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.keyboard.ReplyKeyboardMaker;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.Map;
 
 @Component
@@ -48,7 +51,12 @@ public class MessageHandler {
 
                 if (messageData.length == 4 && (messageData[2].equalsIgnoreCase("to") || messageData[2].equalsIgnoreCase("в"))) {
 
-                    return getCurrencyCalculationMessage(chatId, messageData[0], messageData[1], messageData[3]);
+                    ConvertParametersDto convertParametersDto = new ConvertParametersDto();
+                    convertParametersDto.setAmount(messageData[0]);
+                    convertParametersDto.setFrom(messageData[1]);
+                    convertParametersDto.setTo(messageData[3]);
+
+                    return currencyCalculationMessage(chatId, convertParametersDto);
                 }
         }
 
@@ -70,26 +78,32 @@ public class MessageHandler {
         return sendMessage;
     }
 
-    private SendMessage getCurrencyCalculationMessage(String chatId, String amount, String from, String to) {
+    private SendMessage currencyCalculationMessage(String chatId, ConvertParametersDto parameters) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
 
-        if (from.split(",").length > 1) {
+        if (parameters.getFrom().split(",").length > 1) {
             sendMessage.setText(BotMessage.EXCEPTION_CONVERT_FROM_ARGS_LENGTH_MESSAGE.getMessage());
             return sendMessage;
         }
-        if (to.split(",").length > 10) {
+        if (parameters.getTo().split(",").length > 10) {
             sendMessage.setText(BotMessage.EXCEPTION_CONVERT_TO_ARGS_LENGTH_MESSAGE.getMessage());
             return sendMessage;
         }
 
-        Map<String, ToCurrencyConvert> rates = null;
+        FromToCurrency fromToCurrency = null;
         try {
-            rates = currencyController.getCalcRateAmount(amount, from, to);
+            fromToCurrency = currencyController.calculateRateAmount(parameters);
+            sendMessage.setText(generateConvertCurrenciesMessage(fromToCurrency, parameters));
 
         } catch (InputAmountException e) {
             sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_INPUT_AMOUNT_MESSAGE.getMessage());
+
+            return sendMessage;
+
+        }catch (ServiceUnavailableException e) {
+            sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage());
 
             return sendMessage;
 
@@ -97,29 +111,6 @@ public class MessageHandler {
             sendMessage.setText(BotMessage.EXCEPTION_NO_VALID_CURRENCY_CODE_MESSAGE.getMessage());
 
             return sendMessage;
-        }
-
-        if (!( rates == null || rates.isEmpty())) {
-            StringBuilder sb = new StringBuilder();
-
-            sb.append("*Конвертация по вашему запросу*\n\n");
-            for (String key : rates.keySet()) {
-
-                ToCurrencyConvert toCurrency = rates.get(key);
-                String info = TextConstants.convertMessage.replace("{from}", from.toUpperCase())
-                        .replace("{to}", getCurrencyCodeFromCurrencyName(toCurrency.getCurrency_name()))
-                        .replace("{rate}", toCurrency.getRate())
-                        .replace("{amount}", amount)
-                        .replace("{rate_for_amount}", toCurrency.getRate_for_amount());
-
-                sb.append(info);
-                sb.append("\n");
-            }
-
-            sendMessage.setText(sb.toString());
-
-        } else {
-            sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage());
         }
 
         return sendMessage;
@@ -176,6 +167,33 @@ public class MessageHandler {
 
         } else {
             return BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage();
+        }
+    }
+
+    private String generateConvertCurrenciesMessage(FromToCurrency fromToCurrency, ConvertParametersDto parameters) {
+        Map<String, ToCurrencyConvert> rates = fromToCurrency.getRates();
+
+        if (!(rates == null || rates.isEmpty())) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("*Конвертация по вашему запросу*\n\n");
+            for (String key : rates.keySet()) {
+
+                ToCurrencyConvert toCurrency = rates.get(key);
+                String info = TextConstants.convertMessage.replace("{from}", parameters.getFrom().toUpperCase())
+                        .replace("{to}", getCurrencyCodeFromCurrencyName(toCurrency.getCurrencyName()))
+                        .replace("{rate}", toCurrency.getRate())
+                        .replace("{amount}", parameters.getAmount())
+                        .replace("{rate_for_amount}", toCurrency.getRateForAmount());
+
+                sb.append(info);
+                sb.append("\n");
+            }
+
+            return sb.toString();
+
+        } else {
+            return BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage();
         }
     }
 

@@ -3,12 +3,13 @@ package ru.svistunovaleksei.tg.currencyconverter.currencyapi;
 import org.springframework.stereotype.Controller;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.service.AllCurrencyService;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.service.FromToCurrencyService;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -28,22 +29,24 @@ public class CurrencyController {
         return allCurrencyService.getAllCurrency();
     }
 
-    public Map<String, ToCurrencyConvert> getCalcRateAmount(String amount, String from, String to) throws InputAmountException, IllegalArgumentException {
-        if (!Pattern.compile("\\d{1,13}([\\.\\,]\\d{1,5})?").matcher(amount).matches()) {
+    public FromToCurrency calculateRateAmount(ConvertParametersDto parameters) throws InputAmountException, IllegalArgumentException, ServiceUnavailableException {
+
+        if (!Pattern.compile("\\d{1,13}([\\.\\,]\\d{1,5})?").matcher(parameters.getAmount()).matches()) {
             throw new InputAmountException();
         }
 
-        if (validateCurrencyCode(from) && validateCurrencyCode(to)) {
-            FromToCurrency fromToCurrency = fromToCurrencyService.getCalcRateAmount(amount, from, to);
+        if (validateCurrencyCode(parameters.getFrom()) && validateCurrencyCode(parameters.getTo())) {
+            FromToCurrency fromToCurrency = fromToCurrencyService.calculateRateAmount(parameters);
 
             if (fromToCurrency.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
-                return fromToCurrency.getRates();
+                return fromToCurrency;
+            } else {
+                throw new ServiceUnavailableException();
             }
 
         } else {
             throw new IllegalArgumentException();
         }
-        return null;
     }
 
     private boolean validateCurrencyCode(String code) {

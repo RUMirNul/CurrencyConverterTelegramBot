@@ -1,19 +1,24 @@
 package ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ToCurrencyConvert {
-    private String currency_name;
+    @JsonProperty("currency_name")
+    private String currencyName;
+    @JsonProperty("rate")
     private String rate;
-    private String rate_for_amount;
+    @JsonProperty("rate_for_amount")
+    private String rateForAmount;
 
     public ToCurrencyConvert() {
     }
 
-    public String getCurrency_name() {
-        return currency_name;
+    public String getCurrencyName() {
+        return currencyName;
     }
 
-    public void setCurrency_name(String currency_name) {
-        this.currency_name = currency_name;
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
     }
 
     public String getRate() {
@@ -24,11 +29,11 @@ public class ToCurrencyConvert {
         this.rate = rate;
     }
 
-    public String getRate_for_amount() {
-        return rate_for_amount;
+    public String getRateForAmount() {
+        return rateForAmount;
     }
 
-    public void setRate_for_amount(String rate_for_amount) {
-        this.rate_for_amount = rate_for_amount;
+    public void setRateForAmount(String rateForAmount) {
+        this.rateForAmount = rateForAmount;
     }
 }

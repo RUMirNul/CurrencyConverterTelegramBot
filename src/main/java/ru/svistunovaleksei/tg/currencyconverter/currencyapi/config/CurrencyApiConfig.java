@@ -1,31 +1,36 @@
 package ru.svistunovaleksei.tg.currencyconverter.currencyapi.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
+@ConfigurationProperties(prefix = "currency.api")
 public class CurrencyApiConfig {
-    @Value("${currency.api.path.all.currency}")
-    private String pathAllCurrency;
 
-    @Value("${currency.api.path.convert.from.to.amount}")
-    private String pathConvertFromToAmount;
+    private String allPath;
 
-    @Value("${currency.api.token}")
-    private String token;
+    private String convertPath;
+
 
     public CurrencyApiConfig() {
     }
 
-    public String getPathAllCurrency() {
-        return pathAllCurrency;
+
+    public String getAllPath() {
+        return allPath;
     }
 
-    public String getPathConvertFromToAmount() {
-        return pathConvertFromToAmount;
+    public void setAllPath(String allPath) {
+        this.allPath = allPath;
     }
 
-    public String getToken() {
-        return token;
+    public String getConvertPath() {
+        return convertPath;
+    }
+
+    public void setConvertPath(String convertPath) {
+        this.convertPath = convertPath;
     }
 }

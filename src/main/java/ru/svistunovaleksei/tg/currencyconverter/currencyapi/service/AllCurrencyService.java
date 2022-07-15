@@ -1,44 +1,34 @@
 package ru.svistunovaleksei.tg.currencyconverter.currencyapi.service;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.APIMessageEnum;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.AllCurrency;
-
-import java.util.Map;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
 
 @Service
 public class AllCurrencyService {
 
-    private CurrencyApiConfig currencyApiConfig;
-    private String url;
-    private Map<String, String> allCurrenciesNames;
-    private String status;
+    private final CurrencyApiConfig currencyApiConfig;
 
     public AllCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
-        this.url = currencyApiConfig.getPathAllCurrency().replace("{token}", currencyApiConfig.getToken());
     }
 
-    public Map<String, String> getAllCurrenciesNames() {
-        return allCurrenciesNames;
-    }
+    public AllCurrencyDto getAllCurrency() {
+        AllCurrencyDto allCurrencyDto = WebClient.builder()
+                .baseUrl(currencyApiConfig.getAllPath())
+                .build()
+                .get()
+                .retrieve()
+                .bodyToMono(AllCurrencyDto.class)
+                .onErrorReturn(new AllCurrencyDto())
+                .block();
 
-    public String getStatus() {
-        return status;
-    }
 
-    @PostConstruct
-    public void update() {
-        RestTemplate restTemplate = new RestTemplate();
-        AllCurrency allCurrency = restTemplate.getForEntity(url, AllCurrency.class).getBody();
-        if (allCurrency.getStatus().equalsIgnoreCase(APIMessageEnum.SUCCESS.getMessage())) {
-            this.allCurrenciesNames = allCurrency.getCurrencies();
-            this.allCurrenciesNames.put("RUB", "Российский рубль");
-        }
-        this.status = allCurrency.getStatus();
+        if (!allCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) return new AllCurrencyDto();
+
+        return allCurrencyDto;
     }
 
 }

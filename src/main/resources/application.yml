@@ -1,0 +1,14 @@
+server:
+  port: 5000
+
+telegram:
+  bot:
+    name: ConverterCalculatorCurrencyBot
+    token: BOTTOKEN
+    webhookPath: https://d2c9-94-241-55-71.eu.ngrok.io
+
+currency:
+  api:
+    allPath: https://api.getgeoapi.com/v2/currency/list?api_key=APITOKEN
+    convertPath: https://api.getgeoapi.com/v2/currency/convert?api_key=APITOKEN&from={from}&to={to}&amount={amount}&format=json
+

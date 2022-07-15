@@ -1,40 +1,38 @@
 package ru.svistunovaleksei.tg.currencyconverter.currencyapi.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.entity.ToCurrencyConvert;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class FromToCurrencyService {
 
-    private CurrencyApiConfig currencyApiConfig;
-    private String url;
-    private Map<String, ToCurrencyConvert> rates;
-    private String status;
+    private final CurrencyApiConfig currencyApiConfig;
 
 
 
     public FromToCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
-        this.url = currencyApiConfig.getPathConvertFromToAmount().replace("{token}", currencyApiConfig.getToken());
     }
 
-    public Map<String, ToCurrencyConvert> getRates() {
-        return rates;
-    }
+    public FromToCurrency calculateRateAmount(ConvertParametersDto parameters) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("amount", parameters.getAmount());
+        urlParams.put("from", parameters.getFrom());
+        urlParams.put("to", parameters.getTo());
 
-    public String getStatus() {
-        return status;
-    }
-
-    public FromToCurrency getCalcRateAmount(String amount, String from, String to) {
-        RestTemplate restTemplate = new RestTemplate();
-        String urlWithAgrs = url.replace("{amount}", amount).replace("{from}", from).replace("{to}", to);
-        FromToCurrency fromToCurrency = restTemplate.getForEntity(urlWithAgrs,FromToCurrency.class).getBody();
-        return fromToCurrency;
+        return WebClient.builder()
+                .baseUrl(currencyApiConfig.getConvertPath())
+                .defaultUriVariables(urlParams)
+                .build()
+                .get()
+                .retrieve()
+                .bodyToMono(FromToCurrency.class)
+                .block();
     }
 }

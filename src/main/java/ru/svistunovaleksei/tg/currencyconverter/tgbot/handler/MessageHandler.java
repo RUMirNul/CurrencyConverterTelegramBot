@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.CurrencyController;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
 import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessage;
@@ -98,7 +99,7 @@ public class MessageHandler {
             return sendMessage;
         }
 
-        if (!(rates.isEmpty() || rates == null)) {
+        if (!( rates == null || rates.isEmpty())) {
             StringBuilder sb = new StringBuilder();
 
             sb.append("*Конвертация по вашему запросу*\n\n");
@@ -125,30 +126,19 @@ public class MessageHandler {
     }
 
     private SendMessage getAllCurrencyMessage(String chatId) {
-        Map<String, String> allCurrencyMap = currencyController.getAllCurrenciesNames();
+        AllCurrencyDto allCurrencyDto = currencyController.getAllCurrenciesNames();
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
-
-        if (!(allCurrencyMap.isEmpty() || allCurrencyMap == null)) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("*Доступные валюты*\n\n");
-            sb.append("*Код валюты (Полное назание валюты)*\n");
-            for (String key : allCurrencyMap.keySet()) {
-                sb.append(key);
-                sb.append(" (" + allCurrencyMap.get(key) + ")\n");
-            }
-            sendMessage.setText(sb.toString());
-        } else {
-            sendMessage.setText(BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage());
-        }
+        sendMessage.setText(generateAllCurrenciesMessage(allCurrencyDto));
 
         return sendMessage;
     }
 
     private String getCurrencyCodeFromCurrencyName(String currencyName) {
-        Map<String, String> allCurrencyMap = currencyController.getAllCurrenciesNames();
+        AllCurrencyDto allCurrencyDto = currencyController.getAllCurrenciesNames();
+        Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
 
         for (Map.Entry<String, String> entry : allCurrencyMap.entrySet()) {
             if (currencyName.equals(entry.getValue())) {
@@ -166,6 +156,27 @@ public class MessageHandler {
         }
 
         return newString;
+    }
+
+    private String generateAllCurrenciesMessage(AllCurrencyDto allCurrencyDto) {
+        Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
+
+        if (!(allCurrencyMap == null || allCurrencyMap.isEmpty())) {
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("*Доступные валюты*\n\n");
+            sb.append("*Код валюты (Полное назание валюты)*\n");
+
+            for (String key : allCurrencyMap.keySet()) {
+                sb.append(key);
+                sb.append(" (" + allCurrencyMap.get(key) + ")\n");
+            }
+
+            return sb.toString();
+
+        } else {
+            return BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage();
+        }
     }
 
 }

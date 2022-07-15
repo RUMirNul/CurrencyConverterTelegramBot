@@ -2,6 +2,7 @@ package ru.svistunovaleksei.tg.currencyconverter.currencyapi;
 
 import org.springframework.stereotype.Controller;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
@@ -23,22 +24,22 @@ public class CurrencyController {
         this.fromToCurrencyService = fromToCurrencyService;
     }
 
-    public Map<String, String> getAllCurrenciesNames() {
-        if (!allCurrencyService.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
-            allCurrencyService.update();
-        }
-        return allCurrencyService.getAllCurrenciesNames();
+    public AllCurrencyDto getAllCurrenciesNames() {
+        return allCurrencyService.getAllCurrency();
     }
 
     public Map<String, ToCurrencyConvert> getCalcRateAmount(String amount, String from, String to) throws InputAmountException, IllegalArgumentException {
         if (!Pattern.compile("\\d{1,13}([\\.\\,]\\d{1,5})?").matcher(amount).matches()) {
             throw new InputAmountException();
         }
+
         if (validateCurrencyCode(from) && validateCurrencyCode(to)) {
             FromToCurrency fromToCurrency = fromToCurrencyService.getCalcRateAmount(amount, from, to);
+
             if (fromToCurrency.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
                 return fromToCurrency.getRates();
             }
+
         } else {
             throw new IllegalArgumentException();
         }
@@ -46,8 +47,9 @@ public class CurrencyController {
     }
 
     private boolean validateCurrencyCode(String code) {
-        Map<String, String> allCurrencyNames = allCurrencyService.getAllCurrenciesNames();
-        if (!(allCurrencyNames.isEmpty() || allCurrencyNames == null)) {
+        Map<String, String> allCurrencyNames = allCurrencyService.getAllCurrency().getCurrencies();
+
+        if (!(allCurrencyNames == null || allCurrencyNames.isEmpty())) {
             Set<String> currencyCode = allCurrencyNames.keySet();
 
             String[] codeList = code.split(",");

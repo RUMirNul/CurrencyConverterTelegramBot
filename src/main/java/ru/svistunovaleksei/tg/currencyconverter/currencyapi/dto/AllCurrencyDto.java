@@ -2,7 +2,7 @@ package ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto;
 
 import java.util.Map;
 
-public class AllCurrency {
+public class AllCurrencyDto {
 
     private Map<String, String> currencies;
     private String status;

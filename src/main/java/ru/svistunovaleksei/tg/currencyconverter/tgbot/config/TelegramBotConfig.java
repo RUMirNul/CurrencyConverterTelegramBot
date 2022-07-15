@@ -1,26 +1,41 @@
 package ru.svistunovaleksei.tg.currencyconverter.tgbot.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
+@ConfigurationProperties(prefix = "telegram.bot")
 public class TelegramBotConfig {
-    @Value("${telegram.bot.name}")
-    private String userName;
-    @Value("${telegram.bot.token}")
-    private String botToken;
-    @Value("${telegram.bot.webhook.path}")
+
+    private String name;
+
+    private String token;
+
     private String webHookPath;
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public String getBotToken() {
-        return botToken;
+    public String getToken() {
+        return token;
     }
 
     public String getWebHookPath() {
         return webHookPath;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setWebHookPath(String webHookPath) {
+        this.webHookPath = webHookPath;
     }
 }

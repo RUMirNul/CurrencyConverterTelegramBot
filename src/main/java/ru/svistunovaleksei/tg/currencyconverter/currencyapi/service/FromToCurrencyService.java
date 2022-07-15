@@ -15,22 +15,12 @@ public class FromToCurrencyService {
 
     private CurrencyApiConfig currencyApiConfig;
     private String url;
-    private Map<String, ToCurrencyConvert> rates;
-    private String status;
 
 
 
     public FromToCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
-        this.url = currencyApiConfig.getPathConvertFromToAmount().replace("{token}", currencyApiConfig.getToken());
-    }
-
-    public Map<String, ToCurrencyConvert> getRates() {
-        return rates;
-    }
-
-    public String getStatus() {
-        return status;
+        this.url = currencyApiConfig.getConvertPath();
     }
 
     public FromToCurrency calculateRateAmount(ConvertParametersDto parameters) {

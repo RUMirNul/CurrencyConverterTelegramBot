@@ -18,7 +18,7 @@ public class AllCurrencyService {
 
     public AllCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
-        this.url = currencyApiConfig.getPathAllCurrency().replace("{token}", currencyApiConfig.getToken());
+        this.url = currencyApiConfig.getAllPath();
     }
 
     public AllCurrencyDto getAllCurrency() {

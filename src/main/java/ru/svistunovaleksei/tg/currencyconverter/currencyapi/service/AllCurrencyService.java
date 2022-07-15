@@ -6,30 +6,25 @@ import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiCo
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
 
-import java.util.HashMap;
-
 @Service
 public class AllCurrencyService {
 
-    private CurrencyApiConfig currencyApiConfig;
-    private String url;
-
-    private AllCurrencyDto allCurrencyDto;
+    private final CurrencyApiConfig currencyApiConfig;
 
     public AllCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
-        this.url = currencyApiConfig.getAllPath();
     }
 
     public AllCurrencyDto getAllCurrency() {
-        allCurrencyDto = WebClient.builder()
-                .baseUrl(url)
+        AllCurrencyDto allCurrencyDto = WebClient.builder()
+                .baseUrl(currencyApiConfig.getAllPath())
                 .build()
                 .get()
                 .retrieve()
                 .bodyToMono(AllCurrencyDto.class)
                 .onErrorReturn(new AllCurrencyDto())
                 .block();
+
 
         if (!allCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) return new AllCurrencyDto();
 

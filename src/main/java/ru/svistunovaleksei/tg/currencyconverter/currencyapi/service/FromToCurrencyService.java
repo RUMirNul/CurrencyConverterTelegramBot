@@ -5,7 +5,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiConfig;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,14 +12,12 @@ import java.util.Map;
 @Service
 public class FromToCurrencyService {
 
-    private CurrencyApiConfig currencyApiConfig;
-    private String url;
+    private final CurrencyApiConfig currencyApiConfig;
 
 
 
     public FromToCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
-        this.url = currencyApiConfig.getConvertPath();
     }
 
     public FromToCurrency calculateRateAmount(ConvertParametersDto parameters) {
@@ -29,15 +26,13 @@ public class FromToCurrencyService {
         urlParams.put("from", parameters.getFrom());
         urlParams.put("to", parameters.getTo());
 
-        FromToCurrency fromToCurrency = WebClient.builder()
-                .baseUrl(url)
+        return WebClient.builder()
+                .baseUrl(currencyApiConfig.getConvertPath())
                 .defaultUriVariables(urlParams)
                 .build()
                 .get()
                 .retrieve()
                 .bodyToMono(FromToCurrency.class)
                 .block();
-
-        return fromToCurrency;
     }
 }

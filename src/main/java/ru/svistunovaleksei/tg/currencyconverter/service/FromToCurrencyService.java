@@ -1,10 +1,10 @@
-package ru.svistunovaleksei.tg.currencyconverter.currencyapi.service;
+package ru.svistunovaleksei.tg.currencyconverter.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.config.CurrencyApiConfig;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrency;
 
 import java.util.HashMap;
 import java.util.Map;

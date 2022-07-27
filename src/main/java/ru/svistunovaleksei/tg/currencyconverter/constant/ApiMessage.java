@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant;
+package ru.svistunovaleksei.tg.currencyconverter.constant;
 
 public enum ApiMessage {
     SUCCESS("success");

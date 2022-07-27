@@ -1,18 +1,18 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot.handler;
+package ru.svistunovaleksei.tg.currencyconverter.handler;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.CurrencyController;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ToCurrencyConvert;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessage;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.TextConstants;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.keyboard.ReplyKeyboardMaker;
+import ru.svistunovaleksei.tg.currencyconverter.controller.CurrencyController;
+import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ToCurrencyConvert;
+import ru.svistunovaleksei.tg.currencyconverter.exceptions.InputAmountException;
+import ru.svistunovaleksei.tg.currencyconverter.constant.BotMessage;
+import ru.svistunovaleksei.tg.currencyconverter.constant.TextConstants;
+import ru.svistunovaleksei.tg.currencyconverter.keyboard.ReplyKeyboardMaker;
 
 import javax.naming.ServiceUnavailableException;
 import java.util.Map;

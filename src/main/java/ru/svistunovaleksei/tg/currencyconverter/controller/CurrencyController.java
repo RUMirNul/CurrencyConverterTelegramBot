@@ -1,13 +1,13 @@
-package ru.svistunovaleksei.tg.currencyconverter.currencyapi;
+package ru.svistunovaleksei.tg.currencyconverter.controller;
 
 import org.springframework.stereotype.Controller;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.constant.ApiMessage;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.AllCurrencyDto;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.ConvertParametersDto;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto.FromToCurrency;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.exceptions.InputAmountException;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.service.AllCurrencyService;
-import ru.svistunovaleksei.tg.currencyconverter.currencyapi.service.FromToCurrencyService;
+import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.exceptions.InputAmountException;
+import ru.svistunovaleksei.tg.currencyconverter.service.AllCurrencyService;
+import ru.svistunovaleksei.tg.currencyconverter.service.FromToCurrencyService;
 
 import javax.naming.ServiceUnavailableException;
 import java.util.Map;

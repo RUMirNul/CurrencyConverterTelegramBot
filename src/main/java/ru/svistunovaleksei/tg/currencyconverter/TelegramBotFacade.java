@@ -1,12 +1,12 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot;
+package ru.svistunovaleksei.tg.currencyconverter;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.BotMessage;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.handler.MessageHandler;
+import ru.svistunovaleksei.tg.currencyconverter.constant.BotMessage;
+import ru.svistunovaleksei.tg.currencyconverter.handler.MessageHandler;
 
 @Component
 public class TelegramBotFacade {

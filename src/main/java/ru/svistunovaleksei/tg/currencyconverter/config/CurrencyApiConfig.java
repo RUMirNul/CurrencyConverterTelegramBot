@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.currencyapi.config;
+package ru.svistunovaleksei.tg.currencyconverter.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

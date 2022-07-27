@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot.controller;
+package ru.svistunovaleksei.tg.currencyconverter.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.TelegramBot;
+import ru.svistunovaleksei.tg.currencyconverter.TelegramBot;
 
 @RestController
 public class WebhookController {

@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot.constant;
+package ru.svistunovaleksei.tg.currencyconverter.constant;
 
 public enum BotMessage {
 

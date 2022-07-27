@@ -1,10 +1,10 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot.keyboard;
+package ru.svistunovaleksei.tg.currencyconverter.keyboard;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.constant.ButtonName;
+import ru.svistunovaleksei.tg.currencyconverter.constant.ButtonName;
 
 import java.util.ArrayList;
 import java.util.List;

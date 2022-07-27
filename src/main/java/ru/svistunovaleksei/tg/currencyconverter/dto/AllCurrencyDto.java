@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.currencyapi.dto;
+package ru.svistunovaleksei.tg.currencyconverter.dto;
 
 import java.util.Map;
 

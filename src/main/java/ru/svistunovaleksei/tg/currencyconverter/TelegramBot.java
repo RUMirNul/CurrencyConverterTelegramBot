@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot;
+package ru.svistunovaleksei.tg.currencyconverter;
 
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

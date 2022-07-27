@@ -1,10 +1,10 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot.config;
+package ru.svistunovaleksei.tg.currencyconverter.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.TelegramBot;
-import ru.svistunovaleksei.tg.currencyconverter.tgbot.TelegramBotFacade;
+import ru.svistunovaleksei.tg.currencyconverter.TelegramBot;
+import ru.svistunovaleksei.tg.currencyconverter.TelegramBotFacade;
 
 @Configuration
 public class AppConfig {

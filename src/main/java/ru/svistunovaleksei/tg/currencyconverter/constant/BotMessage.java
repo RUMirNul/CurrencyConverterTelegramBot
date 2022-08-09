@@ -24,18 +24,18 @@ public enum BotMessage {
             "120\n" +
             "123456789.98765\n" +
             "123,98\n"),
-    UNKNOWN_COMMAND_MESSAGE("*Неизвестная команда*\n" +
+    UNKNOWN_COMMAND_MESSAGE("*Неизвестная команда!*\n" +
             "Используйте *\"" + ButtonName.HELP_BUTTON.getButtonName() + "\"* для получения доступных команд.\n"),
     EXCEPTION_ALL_CURRENCY_MESSAGE("*Не удалось получить информацию о доступных валютах!*\n" +
-            "Повторите попытку позже\n"),
-    EXCEPTION_CURRENCY_CONVERT_MESSAGE("*Не удалось получить информацию о конвертации валют *\n" +
-            "Повторите попытку позже\n"),
+            "Повторите попытку позже.\n"),
+    EXCEPTION_CURRENCY_CONVERT_MESSAGE("*Не удалось получить информацию о конвертации валют!*\n" +
+            "Повторите попытку позже.\n"),
     EXCEPTION_NO_VALID_CURRENCY_CODE_MESSAGE("*Некоторые введённые вами валюты не поддерживаются!*\n" +
             "Используйте *\"" + ButtonName.ALL_CURRENCY_BUTTON.getButtonName() + "\"*, чтобы узнать все доступные" +
             " валюты.\n"),
     EXCEPTION_CURRENCY_INPUT_AMOUNT_MESSAGE("*Число для конвертации записано в неверном формате!*\n" +
             "Используйте *\"" + ButtonName.HELP_BUTTON.getButtonName() + "\"* для получения информации о записи числа.\n"),
-    EXCEPTION_CONVERT_FROM_ARGS_LENGTH_MESSAGE("*Можно конвертировать только ИЗ одной валюты!*\n"),
+    EXCEPTION_CONVERT_FROM_ARGS_LENGTH_MESSAGE("*Можно конвертировать только из одной валюты!*\n"),
     EXCEPTION_CONVERT_TO_ARGS_LENGTH_MESSAGE("*Можно конвертировать не более 10 валют за раз!\n*");
 
 

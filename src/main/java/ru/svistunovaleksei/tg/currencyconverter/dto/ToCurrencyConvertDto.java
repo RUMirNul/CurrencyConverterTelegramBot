@@ -2,7 +2,7 @@ package ru.svistunovaleksei.tg.currencyconverter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ToCurrencyConvert {
+public class ToCurrencyConvertDto {
     @JsonProperty("currency_name")
     private String currencyName;
     @JsonProperty("rate")
@@ -10,7 +10,7 @@ public class ToCurrencyConvert {
     @JsonProperty("rate_for_amount")
     private String rateForAmount;
 
-    public ToCurrencyConvert() {
+    public ToCurrencyConvertDto() {
     }
 
     public String getCurrencyName() {

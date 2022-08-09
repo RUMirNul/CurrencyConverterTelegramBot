@@ -3,9 +3,12 @@ package ru.svistunovaleksei.tg.currencyconverter.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.svistunovaleksei.tg.currencyconverter.config.CurrencyApiConfig;
+import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
 import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
-import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrency;
+import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrencyDto;
+import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectFromToCurrencyDtoException;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,24 +18,38 @@ public class FromToCurrencyService {
     private final CurrencyApiConfig currencyApiConfig;
 
 
-
     public FromToCurrencyService(CurrencyApiConfig currencyApiConfig) {
         this.currencyApiConfig = currencyApiConfig;
     }
 
-    public FromToCurrency calculateRateAmount(ConvertParametersDto parameters) {
+    public FromToCurrencyDto calculateRateAmount(ConvertParametersDto parameters) throws ServiceUnavailableException, IncorrectFromToCurrencyDtoException {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("amount", parameters.getAmount());
         urlParams.put("from", parameters.getFrom());
         urlParams.put("to", parameters.getTo());
 
-        return WebClient.builder()
+        FromToCurrencyDto fromToCurrencyDto = WebClient.builder()
                 .baseUrl(currencyApiConfig.getConvertPath())
                 .defaultUriVariables(urlParams)
                 .build()
                 .get()
                 .retrieve()
-                .bodyToMono(FromToCurrency.class)
+                .bodyToMono(FromToCurrencyDto.class)
+                .onErrorReturn(new FromToCurrencyDto())
                 .block();
+
+        if (fromToCurrencyDto == null || fromToCurrencyDto.getStatus() == null || !fromToCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
+            throw new ServiceUnavailableException();
+        }
+
+        if (isValidFromToCurrencyDto(fromToCurrencyDto)) {
+            return fromToCurrencyDto;
+        } else {
+            throw new IncorrectFromToCurrencyDtoException();
+        }
+    }
+
+    private boolean isValidFromToCurrencyDto(FromToCurrencyDto fromToCurrencyDto) {
+        return fromToCurrencyDto.getRates() != null && fromToCurrencyDto.getStatus() != null;
     }
 }

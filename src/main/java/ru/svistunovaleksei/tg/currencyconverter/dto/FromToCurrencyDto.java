@@ -2,17 +2,17 @@ package ru.svistunovaleksei.tg.currencyconverter.dto;
 
 import java.util.Map;
 
-public class FromToCurrency {
+public class FromToCurrencyDto {
 
-    private Map<String, ToCurrencyConvert> rates;
+    private Map<String, ToCurrencyConvertDto> rates;
 
     private String status;
 
-    public Map<String, ToCurrencyConvert> getRates() {
+    public Map<String, ToCurrencyConvertDto> getRates() {
         return rates;
     }
 
-    public void setRates(Map<String, ToCurrencyConvert> rates) {
+    public void setRates(Map<String, ToCurrencyConvertDto> rates) {
         this.rates = rates;
     }
 

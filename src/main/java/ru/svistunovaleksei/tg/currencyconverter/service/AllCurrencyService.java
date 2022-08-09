@@ -2,9 +2,14 @@ package ru.svistunovaleksei.tg.currencyconverter.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import ru.svistunovaleksei.tg.currencyconverter.config.CurrencyApiConfig;
 import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
+import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectAllCurrencyDtoException;
+
+import javax.naming.ServiceUnavailableException;
 
 @Service
 public class AllCurrencyService {
@@ -15,7 +20,7 @@ public class AllCurrencyService {
         this.currencyApiConfig = currencyApiConfig;
     }
 
-    public AllCurrencyDto getAllCurrency() {
+    public AllCurrencyDto getAllCurrency() throws ServiceUnavailableException, IncorrectAllCurrencyDtoException {
         AllCurrencyDto allCurrencyDto = WebClient.builder()
                 .baseUrl(currencyApiConfig.getAllPath())
                 .build()
@@ -25,10 +30,19 @@ public class AllCurrencyService {
                 .onErrorReturn(new AllCurrencyDto())
                 .block();
 
+        if (allCurrencyDto == null || allCurrencyDto.getStatus() == null || !allCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
+            throw new ServiceUnavailableException();
+        }
 
-        if (!allCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) return new AllCurrencyDto();
+        if (isValidAllCurrencyDto(allCurrencyDto)) {
+            return allCurrencyDto;
+        } else {
+            throw new IncorrectAllCurrencyDtoException();
+        }
+    }
 
-        return allCurrencyDto;
+    private boolean isValidAllCurrencyDto(AllCurrencyDto allCurrencyDto) {
+        return allCurrencyDto.getCurrencies() != null && allCurrencyDto.getStatus() != null;
     }
 
 }

@@ -2,8 +2,6 @@ package ru.svistunovaleksei.tg.currencyconverter.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import ru.svistunovaleksei.tg.currencyconverter.config.CurrencyApiConfig;
 import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
@@ -22,7 +20,7 @@ public class AllCurrencyService {
 
     public AllCurrencyDto getAllCurrency() throws ServiceUnavailableException, IncorrectAllCurrencyDtoException {
         AllCurrencyDto allCurrencyDto = WebClient.builder()
-                .baseUrl(currencyApiConfig.getAllPath())
+                .baseUrl(currencyApiConfig.getAllCurrencyPath())
                 .build()
                 .get()
                 .retrieve()
@@ -42,7 +40,7 @@ public class AllCurrencyService {
     }
 
     private boolean isValidAllCurrencyDto(AllCurrencyDto allCurrencyDto) {
-        return allCurrencyDto.getCurrencies() != null && allCurrencyDto.getStatus() != null;
+        return allCurrencyDto.getStatus() != null && allCurrencyDto.getCurrencies() != null && !allCurrencyDto.getCurrencies().isEmpty();
     }
 
 }

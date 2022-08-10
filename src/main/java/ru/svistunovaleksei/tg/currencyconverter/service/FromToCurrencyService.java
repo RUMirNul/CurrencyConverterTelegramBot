@@ -50,6 +50,6 @@ public class FromToCurrencyService {
     }
 
     private boolean isValidFromToCurrencyDto(FromToCurrencyDto fromToCurrencyDto) {
-        return fromToCurrencyDto.getRates() != null && fromToCurrencyDto.getStatus() != null;
+        return fromToCurrencyDto.getStatus() != null && fromToCurrencyDto.getRates() != null && !fromToCurrencyDto.getRates().isEmpty();
     }
 }

@@ -1,6 +1,6 @@
-package ru.svistunovaleksei.tg.currencyconverter.controller;
+package ru.svistunovaleksei.tg.currencyconverter.service;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
@@ -16,13 +16,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-@Controller
-public class CurrencyController {
+@Service
+public class CurrencyService {
 
     private AllCurrencyService allCurrencyService;
     private FromToCurrencyService fromToCurrencyService;
 
-    public CurrencyController(AllCurrencyService allCurrencyService, FromToCurrencyService fromToCurrencyService) {
+    public CurrencyService(AllCurrencyService allCurrencyService, FromToCurrencyService fromToCurrencyService) {
         this.allCurrencyService = allCurrencyService;
         this.fromToCurrencyService = fromToCurrencyService;
     }

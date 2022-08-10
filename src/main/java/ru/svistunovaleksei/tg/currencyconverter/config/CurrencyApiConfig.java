@@ -1,15 +1,13 @@
 package ru.svistunovaleksei.tg.currencyconverter.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 @Configuration
-@ConfigurationProperties(prefix = "currency.api")
+@ConfigurationProperties(prefix = "app.currency-api")
 public class CurrencyApiConfig {
 
-    private String allPath;
+    private String allCurrencyPath;
 
     private String convertPath;
 
@@ -18,12 +16,12 @@ public class CurrencyApiConfig {
     }
 
 
-    public String getAllPath() {
-        return allPath;
+    public String getAllCurrencyPath() {
+        return allCurrencyPath;
     }
 
-    public void setAllPath(String allPath) {
-        this.allPath = allPath;
+    public void setAllCurrencyPath(String allCurrencyPath) {
+        this.allCurrencyPath = allCurrencyPath;
     }
 
     public String getConvertPath() {

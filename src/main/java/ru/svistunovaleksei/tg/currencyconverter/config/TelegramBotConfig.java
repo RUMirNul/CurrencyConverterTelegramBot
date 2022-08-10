@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "telegram.bot")
+@ConfigurationProperties(prefix = "app.telegram-bot")
 public class TelegramBotConfig {
 
     private String name;

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.svistunovaleksei.tg.currencyconverter.controller.CurrencyController;
+import ru.svistunovaleksei.tg.currencyconverter.service.CurrencyService;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrencyDto;
@@ -23,12 +23,12 @@ import java.util.Map;
 public class MessageHandler {
 
     private ReplyKeyboardMaker replyKeyboardMaker;
-    private CurrencyController currencyController;
+    private CurrencyService currencyService;
 
 
-    public MessageHandler(ReplyKeyboardMaker replyKeyboardMaker, CurrencyController currencyController) {
+    public MessageHandler(ReplyKeyboardMaker replyKeyboardMaker, CurrencyService currencyService) {
         this.replyKeyboardMaker = replyKeyboardMaker;
-        this.currencyController = currencyController;
+        this.currencyService = currencyService;
     }
 
     public BotApiMethod<?> handler(Message message) {
@@ -96,7 +96,7 @@ public class MessageHandler {
 
         FromToCurrencyDto fromToCurrencyDto = null;
         try {
-            fromToCurrencyDto = currencyController.calculateRateAmount(parameters);
+            fromToCurrencyDto = currencyService.calculateRateAmount(parameters);
             sendMessage.setText(generateConvertCurrenciesMessage(fromToCurrencyDto, parameters));
 
         } catch (InputAmountException e) {
@@ -104,7 +104,8 @@ public class MessageHandler {
 
             return sendMessage;
 
-        }catch (ServiceUnavailableException | IncorrectFromToCurrencyDtoException | IncorrectAllCurrencyDtoException e) {
+        } catch (ServiceUnavailableException | IncorrectFromToCurrencyDtoException |
+                 IncorrectAllCurrencyDtoException e) {
             sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage());
 
             return sendMessage;
@@ -126,7 +127,7 @@ public class MessageHandler {
 
         AllCurrencyDto allCurrencyDto = null;
         try {
-            allCurrencyDto = currencyController.getAllCurrenciesNames();
+            allCurrencyDto = currencyService.getAllCurrenciesNames();
         } catch (ServiceUnavailableException | IncorrectAllCurrencyDtoException e) {
             sendMessage.setText(BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage());
             return sendMessage;
@@ -138,7 +139,7 @@ public class MessageHandler {
     }
 
     private String getCurrencyCodeFromCurrencyName(String currencyName) throws ServiceUnavailableException, IncorrectAllCurrencyDtoException {
-        AllCurrencyDto allCurrencyDto = currencyController.getAllCurrenciesNames();
+        AllCurrencyDto allCurrencyDto = currencyService.getAllCurrenciesNames();
         Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
 
         for (Map.Entry<String, String> entry : allCurrencyMap.entrySet()) {
@@ -162,54 +163,44 @@ public class MessageHandler {
     private String generateAllCurrenciesMessage(AllCurrencyDto allCurrencyDto) {
         Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
 
-        if (!(allCurrencyMap == null || allCurrencyMap.isEmpty())) {
+            StringBuilder sb = new StringBuilder("""
+                    *Доступные валюты*
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("*Доступные валюты*\n\n");
-            sb.append("*Код валюты (Полное назание валюты)*\n");
+                    *Код валюты (Полное назание валюты)*
+                    """);
 
             for (String key : allCurrencyMap.keySet()) {
                 sb.append(key);
-                sb.append(" (" + allCurrencyMap.get(key) + ")\n");
+                sb.append(" (").append(allCurrencyMap.get(key)).append(")\n");
             }
 
             return sb.toString();
-
-        } else {
-            return BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage();
-        }
     }
 
     private String generateConvertCurrenciesMessage(FromToCurrencyDto fromToCurrencyDto, ConvertParametersDto parameters) {
         Map<String, ToCurrencyConvertDto> rates = fromToCurrencyDto.getRates();
 
-        if (!(rates == null || rates.isEmpty())) {
-            StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-            sb.append("*Конвертация по вашему запросу*\n\n");
-            for (String key : rates.keySet()) {
+        sb.append("*Конвертация по вашему запросу*\n\n");
+        for (String key : rates.keySet()) {
 
-                ToCurrencyConvertDto toCurrency = rates.get(key);
-                String info = null;
-                try {
-                    info = TextConstants.convertMessage.replace("{from}", parameters.getFrom().toUpperCase())
-                            .replace("{to}", getCurrencyCodeFromCurrencyName(toCurrency.getCurrencyName()))
-                            .replace("{rate}", toCurrency.getRate())
-                            .replace("{amount}", parameters.getAmount())
-                            .replace("{rate_for_amount}", toCurrency.getRateForAmount());
-                } catch (ServiceUnavailableException | IncorrectAllCurrencyDtoException e) {
-                    return BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage();
-                }
-
-                sb.append(info);
-                sb.append("\n");
+            ToCurrencyConvertDto toCurrency = rates.get(key);
+            String info = null;
+            try {
+                info = TextConstants.convertMessage.replace("{from}", parameters.getFrom().toUpperCase())
+                        .replace("{to}", getCurrencyCodeFromCurrencyName(toCurrency.getCurrencyName()))
+                        .replace("{rate}", toCurrency.getRate())
+                        .replace("{amount}", parameters.getAmount())
+                        .replace("{rate_for_amount}", toCurrency.getRateForAmount());
+            } catch (ServiceUnavailableException | IncorrectAllCurrencyDtoException e) {
+                return BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage();
             }
 
-            return sb.toString();
-
-        } else {
-            return BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage();
+            sb.append(info);
+            sb.append("\n");
         }
+        return sb.toString();
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.svistunovaleksei.tg.currencyconverter.handler;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -94,7 +95,7 @@ public class MessageHandler {
             return sendMessage;
         }
 
-        FromToCurrencyDto fromToCurrencyDto = null;
+        FromToCurrencyDto fromToCurrencyDto;
         try {
             fromToCurrencyDto = currencyService.calculateRateAmount(parameters);
             sendMessage.setText(generateConvertCurrenciesMessage(fromToCurrencyDto, parameters));
@@ -125,7 +126,7 @@ public class MessageHandler {
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
 
-        AllCurrencyDto allCurrencyDto = null;
+        AllCurrencyDto allCurrencyDto;
         try {
             allCurrencyDto = currencyService.getAllCurrenciesNames();
         } catch (ServiceUnavailableException | IncorrectAllCurrencyDtoException e) {
@@ -160,7 +161,8 @@ public class MessageHandler {
         return newString;
     }
 
-    private String generateAllCurrenciesMessage(AllCurrencyDto allCurrencyDto) {
+    @Cacheable("AllCurrencies")
+    public String generateAllCurrenciesMessage(AllCurrencyDto allCurrencyDto) {
         Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
 
             StringBuilder sb = new StringBuilder("""
@@ -186,7 +188,7 @@ public class MessageHandler {
         for (String key : rates.keySet()) {
 
             ToCurrencyConvertDto toCurrency = rates.get(key);
-            String info = null;
+            String info;
             try {
                 info = TextConstants.convertMessage.replace("{from}", parameters.getFrom().toUpperCase())
                         .replace("{to}", getCurrencyCodeFromCurrencyName(toCurrency.getCurrencyName()))

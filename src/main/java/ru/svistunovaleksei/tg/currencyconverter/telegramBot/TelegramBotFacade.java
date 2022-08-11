@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter;
+package ru.svistunovaleksei.tg.currencyconverter.telegramBot;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -13,17 +13,21 @@ public class TelegramBotFacade {
 
     private final MessageHandler messageHandler;
 
-
     public TelegramBotFacade(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
     }
 
-
     public BotApiMethod<?> handler(Update update) {
         Message message = update.getMessage();
+
         if (message != null && message.hasText()) {
             return messageHandler.handler(message);
+
+        } else if (message != null) {
+            return new SendMessage(message.getChatId().toString(), BotMessage.UNKNOWN_COMMAND_MESSAGE.getMessage());
+
+        } else {
+            return new SendMessage();
         }
-        return new SendMessage(message.getChatId().toString(), BotMessage.UNKNOWN_COMMAND_MESSAGE.getMessage());
     }
 }

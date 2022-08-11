@@ -1,15 +1,13 @@
 package ru.svistunovaleksei.tg.currencyconverter.service;
 
 import org.springframework.stereotype.Service;
-import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.constant.ApiResponseCodeMessage;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
-import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ConversionParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectAllCurrencyDtoException;
 import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectFromToCurrencyDtoException;
 import ru.svistunovaleksei.tg.currencyconverter.exceptions.InputAmountException;
-import ru.svistunovaleksei.tg.currencyconverter.service.AllCurrencyService;
-import ru.svistunovaleksei.tg.currencyconverter.service.FromToCurrencyService;
 
 import javax.naming.ServiceUnavailableException;
 import java.util.Map;
@@ -31,7 +29,7 @@ public class CurrencyService {
         return allCurrencyService.getAllCurrency();
     }
 
-    public FromToCurrencyDto calculateRateAmount(ConvertParametersDto parameters) throws InputAmountException, IllegalArgumentException, ServiceUnavailableException, IncorrectFromToCurrencyDtoException, IncorrectAllCurrencyDtoException {
+    public FromToCurrencyDto calculateRateAmount(ConversionParametersDto parameters) throws InputAmountException, IllegalArgumentException, ServiceUnavailableException, IncorrectFromToCurrencyDtoException, IncorrectAllCurrencyDtoException {
 
         if (!Pattern.compile("\\d{1,13}([.,]\\d{1,5})?").matcher(parameters.getAmount()).matches()) {
             throw new InputAmountException();
@@ -40,7 +38,7 @@ public class CurrencyService {
         if (validateCurrencyCode(parameters.getFrom()) && validateCurrencyCode(parameters.getTo())) {
             FromToCurrencyDto fromToCurrencyDto = fromToCurrencyService.calculateRateAmount(parameters);
 
-            if (fromToCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
+            if (fromToCurrencyDto.getStatus().equalsIgnoreCase(ApiResponseCodeMessage.SUCCESS.getMessage())) {
                 return fromToCurrencyDto;
             } else {
                 throw new ServiceUnavailableException();

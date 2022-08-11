@@ -1,18 +1,18 @@
 package ru.svistunovaleksei.tg.currencyconverter.dto;
 
-public class ConvertParametersDto {
+public class ConversionParametersDto {
 
     private String from;
     private String to;
     private String amount;
 
-    public ConvertParametersDto(String from, String to, String amount) {
+    public ConversionParametersDto(String from, String to, String amount) {
         this.from = from;
         this.to = to;
         this.amount = amount;
     }
 
-    public ConvertParametersDto() {
+    public ConversionParametersDto() {
     }
 
     public String getFrom() {

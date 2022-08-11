@@ -3,7 +3,7 @@ package ru.svistunovaleksei.tg.currencyconverter.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.svistunovaleksei.tg.currencyconverter.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
+import ru.svistunovaleksei.tg.currencyconverter.constant.ApiResponseCodeMessage;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectAllCurrencyDtoException;
 
@@ -28,7 +28,7 @@ public class AllCurrencyService {
                 .onErrorReturn(new AllCurrencyDto())
                 .block();
 
-        if (allCurrencyDto == null || allCurrencyDto.getStatus() == null || !allCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
+        if (allCurrencyDto == null || allCurrencyDto.getStatus() == null || !allCurrencyDto.getStatus().equalsIgnoreCase(ApiResponseCodeMessage.SUCCESS.getMessage())) {
             throw new ServiceUnavailableException();
         }
 

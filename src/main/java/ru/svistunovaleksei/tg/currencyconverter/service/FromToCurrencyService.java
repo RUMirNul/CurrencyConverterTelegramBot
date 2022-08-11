@@ -3,8 +3,8 @@ package ru.svistunovaleksei.tg.currencyconverter.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.svistunovaleksei.tg.currencyconverter.config.CurrencyApiConfig;
-import ru.svistunovaleksei.tg.currencyconverter.constant.ApiMessage;
-import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.constant.ApiResponseCodeMessage;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ConversionParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectFromToCurrencyDtoException;
 
@@ -22,7 +22,7 @@ public class FromToCurrencyService {
         this.currencyApiConfig = currencyApiConfig;
     }
 
-    public FromToCurrencyDto calculateRateAmount(ConvertParametersDto parameters) throws ServiceUnavailableException, IncorrectFromToCurrencyDtoException {
+    public FromToCurrencyDto calculateRateAmount(ConversionParametersDto parameters) throws ServiceUnavailableException, IncorrectFromToCurrencyDtoException {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("amount", parameters.getAmount());
         urlParams.put("from", parameters.getFrom());
@@ -38,7 +38,7 @@ public class FromToCurrencyService {
                 .onErrorReturn(new FromToCurrencyDto())
                 .block();
 
-        if (fromToCurrencyDto == null || fromToCurrencyDto.getStatus() == null || !fromToCurrencyDto.getStatus().equalsIgnoreCase(ApiMessage.SUCCESS.getMessage())) {
+        if (fromToCurrencyDto == null || fromToCurrencyDto.getStatus() == null || !fromToCurrencyDto.getStatus().equalsIgnoreCase(ApiResponseCodeMessage.SUCCESS.getMessage())) {
             throw new ServiceUnavailableException();
         }
 

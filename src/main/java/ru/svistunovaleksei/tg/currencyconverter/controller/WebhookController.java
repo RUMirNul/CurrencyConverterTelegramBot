@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.svistunovaleksei.tg.currencyconverter.TelegramBot;
+import ru.svistunovaleksei.tg.currencyconverter.telegramBot.TelegramBot;
 
 @RestController
 public class WebhookController {

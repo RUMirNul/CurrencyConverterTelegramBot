@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.svistunovaleksei.tg.currencyconverter.service.CurrencyService;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
-import ru.svistunovaleksei.tg.currencyconverter.dto.ConvertParametersDto;
+import ru.svistunovaleksei.tg.currencyconverter.dto.ConversionParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.ToCurrencyConvertDto;
 import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectAllCurrencyDtoException;
@@ -54,12 +54,12 @@ public class MessageHandler {
 
                 if (messageData.length == 4 && (messageData[2].equalsIgnoreCase("to") || messageData[2].equalsIgnoreCase("в"))) {
 
-                    ConvertParametersDto convertParametersDto = new ConvertParametersDto();
-                    convertParametersDto.setAmount(messageData[0]);
-                    convertParametersDto.setFrom(messageData[1]);
-                    convertParametersDto.setTo(messageData[3]);
+                    ConversionParametersDto conversionParametersDto = new ConversionParametersDto();
+                    conversionParametersDto.setAmount(messageData[0]);
+                    conversionParametersDto.setFrom(messageData[1]);
+                    conversionParametersDto.setTo(messageData[3]);
 
-                    return currencyCalculationMessage(chatId, convertParametersDto);
+                    return currencyCalculationMessage(chatId, conversionParametersDto);
                 }
         }
 
@@ -81,7 +81,7 @@ public class MessageHandler {
         return sendMessage;
     }
 
-    private SendMessage currencyCalculationMessage(String chatId, ConvertParametersDto parameters) {
+    private SendMessage currencyCalculationMessage(String chatId, ConversionParametersDto parameters) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
@@ -179,7 +179,7 @@ public class MessageHandler {
             return sb.toString();
     }
 
-    private String generateConvertCurrenciesMessage(FromToCurrencyDto fromToCurrencyDto, ConvertParametersDto parameters) {
+    private String generateConvertCurrenciesMessage(FromToCurrencyDto fromToCurrencyDto, ConversionParametersDto parameters) {
         Map<String, ToCurrencyConvertDto> rates = fromToCurrencyDto.getRates();
 
         StringBuilder sb = new StringBuilder();

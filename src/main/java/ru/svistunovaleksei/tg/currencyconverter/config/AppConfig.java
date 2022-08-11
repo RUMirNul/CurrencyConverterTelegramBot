@@ -3,8 +3,8 @@ package ru.svistunovaleksei.tg.currencyconverter.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
-import ru.svistunovaleksei.tg.currencyconverter.TelegramBot;
-import ru.svistunovaleksei.tg.currencyconverter.TelegramBotFacade;
+import ru.svistunovaleksei.tg.currencyconverter.telegramBot.TelegramBot;
+import ru.svistunovaleksei.tg.currencyconverter.telegramBot.TelegramBotFacade;
 
 @Configuration
 public class AppConfig {
@@ -21,7 +21,7 @@ public class AppConfig {
     }
 
     @Bean
-    public TelegramBot springWebhookBot(TelegramBotFacade telegramBotFacade, SetWebhook setWebhook) {
+    public TelegramBot webhookForBot(TelegramBotFacade telegramBotFacade, SetWebhook setWebhook) {
 
         TelegramBot bot = new TelegramBot(telegramBotFacade, setWebhook);
 

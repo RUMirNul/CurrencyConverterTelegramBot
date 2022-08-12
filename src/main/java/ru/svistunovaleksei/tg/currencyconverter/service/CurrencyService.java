@@ -20,6 +20,8 @@ public class CurrencyService {
     private AllCurrencyService allCurrencyService;
     private FromToCurrencyService fromToCurrencyService;
 
+    private final Pattern intOrDoublePattern = Pattern.compile("\\d{1,13}([.,]\\d{1,5})?");
+
     public CurrencyService(AllCurrencyService allCurrencyService, FromToCurrencyService fromToCurrencyService) {
         this.allCurrencyService = allCurrencyService;
         this.fromToCurrencyService = fromToCurrencyService;
@@ -31,7 +33,7 @@ public class CurrencyService {
 
     public FromToCurrencyDto calculateRateAmount(ConversionParametersDto parameters) throws InputAmountException, IllegalArgumentException, ServiceUnavailableException, IncorrectFromToCurrencyDtoException, IncorrectAllCurrencyDtoException {
 
-        if (!Pattern.compile("\\d{1,13}([.,]\\d{1,5})?").matcher(parameters.getAmount()).matches()) {
+        if (!intOrDoublePattern.matcher(parameters.getAmount()).matches()) {
             throw new InputAmountException();
         }
 

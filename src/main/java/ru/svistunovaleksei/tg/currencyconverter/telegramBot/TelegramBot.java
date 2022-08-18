@@ -12,7 +12,7 @@ public class TelegramBot extends SpringWebhookBot {
     private String botUsername;
     private String botToken;
 
-    private TelegramBotFacade telegramBotFacade;
+    private final TelegramBotFacade telegramBotFacade;
 
     public TelegramBot(TelegramBotFacade telegramBotFacade, SetWebhook setWebhook) {
         super(setWebhook);

@@ -51,7 +51,7 @@ public class MessageHandler {
                 if (messageData.length == 4 && (messageData[2].equalsIgnoreCase("to") || messageData[2].equalsIgnoreCase("в"))) {
 
                     ConversionParametersDto conversionParametersDto = new ConversionParametersDto();
-                    conversionParametersDto.setAmount(messageData[0]);
+                    conversionParametersDto.setAmount(messageData[0].replace(",", "."));
                     conversionParametersDto.setFrom(messageData[1]);
                     conversionParametersDto.setTo(messageData[3]);
 
@@ -135,7 +135,7 @@ public class MessageHandler {
     }
 
     private String convertInputData(String input) {
-        String newString = input.replaceAll(", ", ",");
+        String newString = input.replaceAll("\\s{2,}", " ").replaceAll(", ", ",");
 
         if (newString.endsWith(",")) {
             newString = newString.substring(0, newString.length() - 1);

@@ -5,26 +5,22 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.svistunovaleksei.tg.currencyconverter.service.CurrencyService;
+import ru.svistunovaleksei.tg.currencyconverter.constant.BotMessage;
+import ru.svistunovaleksei.tg.currencyconverter.constant.TextConstants;
 import ru.svistunovaleksei.tg.currencyconverter.dto.AllCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.ConversionParametersDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.FromToCurrencyDto;
 import ru.svistunovaleksei.tg.currencyconverter.dto.ToCurrencyConvertDto;
-import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectAllCurrencyDtoException;
-import ru.svistunovaleksei.tg.currencyconverter.exceptions.IncorrectFromToCurrencyDtoException;
-import ru.svistunovaleksei.tg.currencyconverter.exceptions.InputAmountException;
-import ru.svistunovaleksei.tg.currencyconverter.constant.BotMessage;
-import ru.svistunovaleksei.tg.currencyconverter.constant.TextConstants;
 import ru.svistunovaleksei.tg.currencyconverter.keyboard.ReplyKeyboardMaker;
+import ru.svistunovaleksei.tg.currencyconverter.service.CurrencyService;
 
-import javax.naming.ServiceUnavailableException;
 import java.util.Map;
 
 @Component
 public class MessageHandler {
 
-    private ReplyKeyboardMaker replyKeyboardMaker;
-    private CurrencyService currencyService;
+    private final ReplyKeyboardMaker replyKeyboardMaker;
+    private final CurrencyService currencyService;
 
 
     public MessageHandler(ReplyKeyboardMaker replyKeyboardMaker, CurrencyService currencyService) {
@@ -100,23 +96,10 @@ public class MessageHandler {
             fromToCurrencyDto = currencyService.calculateRateAmount(parameters);
             sendMessage.setText(generateConvertCurrenciesMessage(fromToCurrencyDto, parameters));
 
-        } catch (InputAmountException e) {
-            sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_INPUT_AMOUNT_MESSAGE.getMessage());
-
-            return sendMessage;
-
-        } catch (ServiceUnavailableException | IncorrectFromToCurrencyDtoException |
-                 IncorrectAllCurrencyDtoException e) {
-            sendMessage.setText(BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage());
-
-            return sendMessage;
-
-        } catch (IllegalArgumentException e) {
-            sendMessage.setText(BotMessage.EXCEPTION_NO_VALID_CURRENCY_CODE_MESSAGE.getMessage());
-
+        } catch (Exception e) {
+            sendMessage.setText(e.getMessage());
             return sendMessage;
         }
-
         return sendMessage;
     }
 
@@ -129,7 +112,7 @@ public class MessageHandler {
         AllCurrencyDto allCurrencyDto;
         try {
             allCurrencyDto = currencyService.getAllCurrenciesNames();
-        } catch (ServiceUnavailableException | IncorrectAllCurrencyDtoException e) {
+        } catch (Exception e) {
             sendMessage.setText(BotMessage.EXCEPTION_ALL_CURRENCY_MESSAGE.getMessage());
             return sendMessage;
         }
@@ -139,7 +122,7 @@ public class MessageHandler {
         return sendMessage;
     }
 
-    private String getCurrencyCodeFromCurrencyName(String currencyName) throws ServiceUnavailableException, IncorrectAllCurrencyDtoException {
+    private String getCurrencyCodeFromCurrencyName(String currencyName) throws Exception {
         AllCurrencyDto allCurrencyDto = currencyService.getAllCurrenciesNames();
         Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
 
@@ -195,7 +178,7 @@ public class MessageHandler {
                         .replace("{rate}", toCurrency.getRate())
                         .replace("{amount}", parameters.getAmount())
                         .replace("{rate_for_amount}", toCurrency.getRateForAmount());
-            } catch (ServiceUnavailableException | IncorrectAllCurrencyDtoException e) {
+            } catch (Exception e) {
                 return BotMessage.EXCEPTION_CURRENCY_CONVERT_MESSAGE.getMessage();
             }
 

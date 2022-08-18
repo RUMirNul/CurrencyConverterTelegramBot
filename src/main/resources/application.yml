@@ -3,10 +3,12 @@ server:
 
 app:
   telegram-bot:
-    name: ConverterCalculatorCurrencyBot
-    token:
-    webhookPath:
+    name: TELEGRAM BOT NAME
+    token: TELEGRAM BOT TOKEN
+    webhook-path: WEBHOOK FOR TELEGRAM BOT
 
   currency-api:
-    allCurrencyPath: https://api.getgeoapi.com/v2/currency/list?api_key=APITOKEN
-    convertPath: https://api.getgeoapi.com/v2/currency/convert?api_key=APITOKEN&from={from}&to={to}&amount={amount}&format=json
+    getgeoapi-url: https://api.getgeoapi.com
+    getgeoapi-token: API TOKEN
+
+

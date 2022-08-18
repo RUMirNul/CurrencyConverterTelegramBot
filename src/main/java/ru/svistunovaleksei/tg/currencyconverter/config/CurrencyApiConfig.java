@@ -1,34 +1,19 @@
 package ru.svistunovaleksei.tg.currencyconverter.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties(prefix = "app.currency-api")
+@Getter
+@Setter
 public class CurrencyApiConfig {
 
-    private String allCurrencyPath;
-
-    private String convertPath;
-
+    private String getgeoapiUrl;
+    private String getgeoapiToken;
 
     public CurrencyApiConfig() {
-    }
-
-
-    public String getAllCurrencyPath() {
-        return allCurrencyPath;
-    }
-
-    public void setAllCurrencyPath(String allCurrencyPath) {
-        this.allCurrencyPath = allCurrencyPath;
-    }
-
-    public String getConvertPath() {
-        return convertPath;
-    }
-
-    public void setConvertPath(String convertPath) {
-        this.convertPath = convertPath;
     }
 }

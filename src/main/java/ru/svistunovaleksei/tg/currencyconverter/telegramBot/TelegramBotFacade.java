@@ -24,7 +24,9 @@ public class TelegramBotFacade {
             return messageHandler.handler(message);
 
         } else if (message != null) {
-            return new SendMessage(message.getChatId().toString(), BotMessage.UNKNOWN_COMMAND_MESSAGE.getMessage());
+            SendMessage sm = new SendMessage(message.getChatId().toString(), BotMessage.UNKNOWN_COMMAND_MESSAGE.getMessage());
+            sm.enableMarkdown(true);
+            return sm;
 
         } else {
             return new SendMessage();

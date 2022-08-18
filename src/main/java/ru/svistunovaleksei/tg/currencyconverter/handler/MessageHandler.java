@@ -127,7 +127,7 @@ public class MessageHandler {
         Map<String, String> allCurrencyMap = allCurrencyDto.getCurrencies();
 
         for (Map.Entry<String, String> entry : allCurrencyMap.entrySet()) {
-            if (currencyName.equals(entry.getValue())) {
+            if (currencyName.equalsIgnoreCase(entry.getValue())) {
                 return entry.getKey();
             }
         }

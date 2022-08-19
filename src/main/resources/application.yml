@@ -1,0 +1,14 @@
+server:
+  port: 5000
+
+app:
+  telegram-bot:
+    name: TELEGRAM BOT NAME
+    token: TELEGRAM BOT TOKEN
+    webhook-path: WEBHOOK FOR TELEGRAM BOT
+
+  currency-api:
+    getgeoapi-url: https://api.getgeoapi.com
+    getgeoapi-token: API TOKEN
+
+

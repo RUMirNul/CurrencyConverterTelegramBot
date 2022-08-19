@@ -1,12 +1,12 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot.constant;
+package ru.svistunovaleksei.tg.currencyconverter.constant;
 
-public enum ButtonNameEnum {
+public enum ButtonName {
     HELP_BUTTON(TextConstants.help),
     ALL_CURRENCY_BUTTON(TextConstants.allCurrency);
 
     private final String buttonName;
 
-    ButtonNameEnum(String buttonName) {
+    ButtonName(String buttonName) {
         this.buttonName = buttonName;
     }
 

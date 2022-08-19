@@ -1,4 +1,4 @@
-package ru.svistunovaleksei.tg.currencyconverter.tgbot;
+package ru.svistunovaleksei.tg.currencyconverter.telegramBot;
 
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -12,7 +12,7 @@ public class TelegramBot extends SpringWebhookBot {
     private String botUsername;
     private String botToken;
 
-    private TelegramBotFacade telegramBotFacade;
+    private final TelegramBotFacade telegramBotFacade;
 
     public TelegramBot(TelegramBotFacade telegramBotFacade, SetWebhook setWebhook) {
         super(setWebhook);

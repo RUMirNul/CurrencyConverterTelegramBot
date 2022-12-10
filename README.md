@@ -4,6 +4,17 @@
 Telegram bot for currency conversion at the current exchange rate. The bot supports 160+ currencies, it can convert to several currencies at once and any amount.
 
 ### Using 
+
+Link the webhook to the bot
+```
+https://api.telegram.org/bot[BOT_TOKEN]/setWebhook?url=[WEBHOOK_URL]
+```
+
+API for getting the exchange rate
+```
+www.getgeoapi.com
+```
+
 In src/main/resources/application.yml set the configuration parameters:
 ```
 telegram:    
